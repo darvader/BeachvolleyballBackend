@@ -12,10 +12,10 @@ public class Tournament {
 	@GeneratedValue
 	private Long id;
 	private Date date;
-	private String category;
+	private Category category;
 	private String description;
-	private String playMode;
-	private String gender;
+	private PlayMode playMode;
+	private Gender gender;
 	private Double entryFee;
 	private Double priceMoney;
 	private String contact;
@@ -29,11 +29,11 @@ public class Tournament {
 		this.date = date;
 	}
 
-	public String getCategory() {
+	public Category getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(Category category) {
 		this.category = category;
 	}
 
@@ -45,19 +45,19 @@ public class Tournament {
 		this.description = description;
 	}
 
-	public String getPlayMode() {
+	public PlayMode getPlayMode() {
 		return playMode;
 	}
 
-	public void setPlayMode(String playMode) {
+	public void setPlayMode(PlayMode playMode) {
 		this.playMode = playMode;
 	}
 
-	public String getGender() {
+	public Gender getGender() {
 		return gender;
 	}
 
-	public void setGender(String gender) {
+	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
 
