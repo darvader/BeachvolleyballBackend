@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -27,14 +28,15 @@ public class TournamentResource {
 	}
 	
 	@PostMapping("/tournaments")
-	public ResponseEntity<Object> createTournament(@RequestBody Tournament tournament) {
+	public Tournament createTournament(@RequestBody Tournament tournament) {
 		Tournament savedTournament = tournamentRepository.save(tournament);
-
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(savedTournament.getId()).toUri();
-
-		return ResponseEntity.created(location).build();
-
+		return savedTournament;
+	}
+	
+	@PutMapping("/tournaments")
+	public Tournament updateTournament(@RequestBody Tournament tournament) {
+		Tournament savedTournament = tournamentRepository.save(tournament);
+		return savedTournament;
 	}
 	
 	@GetMapping("/tournaments/{id}")
