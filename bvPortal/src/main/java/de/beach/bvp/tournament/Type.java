@@ -1,5 +1,5 @@
 package de.beach.bvp.tournament;
 
-public enum Gender {
+public enum Type {
 	MEN, WOMEN, MIXED
 }

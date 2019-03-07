@@ -15,7 +15,7 @@ public class Tournament {
 	private Category category;
 	private String description;
 	private PlayMode playMode;
-	private Gender gender;
+	private Type gender;
 	private Double entryFee;
 	private Double priceMoney;
 	private String contact;
@@ -53,11 +53,11 @@ public class Tournament {
 		this.playMode = playMode;
 	}
 
-	public Gender getGender() {
+	public Type getGender() {
 		return gender;
 	}
 
-	public void setGender(Gender gender) {
+	public void setGender(Type gender) {
 		this.gender = gender;
 	}
 
