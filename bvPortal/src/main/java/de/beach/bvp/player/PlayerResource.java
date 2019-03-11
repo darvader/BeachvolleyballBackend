@@ -14,29 +14,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://afiedler.ddns.net", "http://localhost:4200"})
 public class PlayerResource {
 	@Autowired
 	private PlayerRepository playerRepository;
 	
-	@GetMapping("/Players")
+	@GetMapping("/players")
 	public List<Player> getAllPlayers() {
 		return playerRepository.findAll();
 	}
 	
-	@PostMapping("/Players")
+	@PostMapping("/players")
 	public Player createPlayer(@RequestBody Player Player) {
 		Player savedPlayer = playerRepository.save(Player);
 		return savedPlayer;
 	}
 	
-	@PutMapping("/Players")
+	@PutMapping("/players")
 	public Player updatePlayer(@RequestBody Player Player) {
 		Player savedPlayer = playerRepository.save(Player);
 		return savedPlayer;
 	}
 	
-	@GetMapping("/Players/{id}")
+	@GetMapping("/players/{id}")
 	public Player retrievePlayer(@PathVariable long id) throws PlayerNotFoundException {
 		Optional<Player> Player = playerRepository.findById(id);
 
@@ -46,7 +46,7 @@ public class PlayerResource {
 		return Player.get();
 	}
 	
-	@DeleteMapping("/Players/{id}")
+	@DeleteMapping("/players/{id}")
 	public void deletePlayer(@PathVariable long id) {
 		playerRepository.deleteById(id);
 	}
