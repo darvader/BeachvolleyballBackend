@@ -13,4 +13,5 @@ public class Player {
 	public String firstName;
 	public String email;
 	public Gender gender;
+	public String club;
 }
