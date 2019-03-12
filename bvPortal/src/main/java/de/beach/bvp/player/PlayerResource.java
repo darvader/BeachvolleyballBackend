@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = {"http://afiedler.ddns.net", "http://localhost:4200"})
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class PlayerResource {
 	@Autowired
 	private PlayerRepository playerRepository;
@@ -24,12 +25,14 @@ public class PlayerResource {
 		return playerRepository.findAll();
 	}
 	
+	@Secured("ROLE_USER")
 	@PostMapping("/players")
 	public Player createPlayer(@RequestBody Player Player) {
 		Player savedPlayer = playerRepository.save(Player);
 		return savedPlayer;
 	}
 	
+	@Secured("ROLE_USER")
 	@PutMapping("/players")
 	public Player updatePlayer(@RequestBody Player Player) {
 		Player savedPlayer = playerRepository.save(Player);
@@ -46,6 +49,7 @@ public class PlayerResource {
 		return Player.get();
 	}
 	
+	@Secured("ROLE_USER")
 	@DeleteMapping("/players/{id}")
 	public void deletePlayer(@PathVariable long id) {
 		playerRepository.deleteById(id);
