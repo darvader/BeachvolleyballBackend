@@ -2,6 +2,7 @@ package de.beach.bvp.player;
 
 import static org.junit.Assert.fail;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import de.beach.bvp.BvPortalApplication;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BvPortalApplication.class)
+@Ignore
 public class PlayerResourceTest {
 
 	@Autowired
