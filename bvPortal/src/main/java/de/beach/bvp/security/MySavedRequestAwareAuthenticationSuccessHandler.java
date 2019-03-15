@@ -1,4 +1,4 @@
-package de.beach.bvp.security;
+/*package de.beach.bvp.security;
 
 import java.io.IOException;
 
@@ -49,4 +49,4 @@ public class MySavedRequestAwareAuthenticationSuccessHandler
     public void setRequestCache(RequestCache requestCache) {
         this.requestCache = requestCache;
     }
-}
+}*/

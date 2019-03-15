@@ -1,4 +1,4 @@
-package de.beach.bvp.security;
+/*package de.beach.bvp.security;
 
 import java.io.IOException;
 
@@ -22,4 +22,4 @@ public final class RestAuthenticationEntryPoint
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, 
           "Unauthorized");
     }
-}
+}*/

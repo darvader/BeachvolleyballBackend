@@ -1,4 +1,4 @@
-package de.beach.bvp.security;
+/*package de.beach.bvp.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -38,11 +38,11 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
           .httpBasic()
           .authenticationEntryPoint(authenticationEntryPoint);
 
-        http.addFilterAfter(new CustomFilter(), BasicAuthenticationFilter.class);
+        http.addFilterAfter(new CustomFilter(), BasicAuthenticationFilter.class); 
     }
     
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-}
+}*/
