@@ -14,4 +14,6 @@ public class Player {
 	public String email;
 	public Gender gender;
 	public String club;
+	public String password;
+	public String role;
 }
