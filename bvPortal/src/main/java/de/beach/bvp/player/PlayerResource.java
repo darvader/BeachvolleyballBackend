@@ -1,9 +1,13 @@
 package de.beach.bvp.player;
 
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.exact;
+
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,4 +56,22 @@ public class PlayerResource {
 	public void deletePlayer(@PathVariable long id) {
 		playerRepository.deleteById(id);
 	}
+	
+	@Secured("ROLE_USER")
+	@GetMapping("/login")
+	public Player login(@RequestBody Login login) {
+		Optional<Player> player = login(login.email, login.password);
+		return player.orElse(null);
+	}
+	
+	public Optional<Player> login(String mail, String password) {
+		Player player = new Player();
+		player.email = mail;
+		player.password = password;
+		ExampleMatcher matcherMail = ExampleMatcher.matching().withMatcher("email", exact()).withMatcher("password",
+				exact());
+		Optional<Player> result = playerRepository.findOne(Example.of(player, matcherMail));
+		return result;
+	}
+
 }
