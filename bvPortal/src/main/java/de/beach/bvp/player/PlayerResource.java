@@ -57,8 +57,7 @@ public class PlayerResource {
 		playerRepository.deleteById(id);
 	}
 	
-	@Secured("ROLE_USER")
-	@GetMapping("/login")
+	@PostMapping("/login")
 	public Player login(@RequestBody Login login) {
 		Optional<Player> player = login(login.email, login.password);
 		return player.orElse(null);
