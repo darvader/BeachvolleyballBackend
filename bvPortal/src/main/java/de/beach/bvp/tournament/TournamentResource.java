@@ -12,10 +12,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.beach.bvp.tournament.registration.Registration;
+import de.beach.bvp.tournament.registration.RegistrationRepository;
+
 @RestController
 public class TournamentResource {
 	@Autowired
 	private TournamentRepository tournamentRepository;
+	@Autowired
+	private RegistrationRepository registrationRepository;
 	
 	@GetMapping("/tournaments")
 	public List<Tournament> getAllTournaments() {
@@ -48,4 +53,10 @@ public class TournamentResource {
 	public void deleteTournament(@PathVariable long id) {
 		tournamentRepository.deleteById(id);
 	}
+	
+	@PostMapping("/register")
+	public Registration registerTournament(@RequestBody Registration registration) {
+		Registration savedRegistration = registrationRepository.save(registration);
+		return savedRegistration;
+	}	
 }

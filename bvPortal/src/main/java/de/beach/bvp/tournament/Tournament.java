@@ -1,12 +1,22 @@
 	package de.beach.bvp.tournament;
 
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import de.beach.bvp.tournament.registration.Registration;
 
 @Entity
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Tournament {
 	@Id
 	@GeneratedValue
@@ -20,6 +30,9 @@ public class Tournament {
 	private Double priceMoney;
 	private String contact;
 	private String name;
+	
+	@OneToMany(mappedBy="tournament", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	public Set<Registration> registrations;
 	
 	public Date getDate() {
 		return date;

@@ -43,12 +43,12 @@ public class PlayerResource {
 	
 	@GetMapping("/players/{id}")
 	public Player retrievePlayer(@PathVariable long id) throws PlayerNotFoundException {
-		Optional<Player> Player = playerRepository.findById(id);
+		Optional<Player> player = playerRepository.findById(id);
 
-		if (!Player.isPresent())
+		if (!player.isPresent())
 			throw new PlayerNotFoundException("id-" + id);
 
-		return Player.get();
+		return player.get();
 	}
 	
 	//@Secured("ROLE_USER")
@@ -58,9 +58,11 @@ public class PlayerResource {
 	}
 	
 	@PostMapping("/login")
-	public Player login(@RequestBody Login login) {
+	public Player login(@RequestBody Login login) throws PlayerNotFoundException {
 		Optional<Player> player = login(login.email, login.password);
-		return player.orElse(null);
+		if (!player.isPresent())
+			throw new PlayerNotFoundException("Spieler wurde nicht gefunden.");
+		return player.get();
 	}
 	
 	public Optional<Player> login(String mail, String password) {
