@@ -43,8 +43,9 @@ public class TournamentResource {
 	public Tournament retrieveTournament(@PathVariable long id) throws TournamentNotFoundException {
 		Optional<Tournament> tournament = tournamentRepository.findById(id);
 
-		if (!tournament.isPresent())
+		if (!tournament.isPresent()) {
 			throw new TournamentNotFoundException("id-" + id);
+		}
 
 		return tournament.get();
 	}
