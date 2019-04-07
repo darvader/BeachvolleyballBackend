@@ -27,6 +27,11 @@ public class TournamentResource {
 		return tournamentRepository.findAll();
 	}
 	
+	@GetMapping("/")
+	public String gets() {
+		return "HealthCheck";
+	}
+	
 	@PostMapping("/tournaments")
 	public Tournament createTournament(@RequestBody Tournament tournament) {
 		Tournament savedTournament = tournamentRepository.save(tournament);

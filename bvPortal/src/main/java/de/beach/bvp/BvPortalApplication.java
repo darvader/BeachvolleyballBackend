@@ -14,8 +14,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class BvPortalApplication {
 
 	public static void main(String[] args) {
+		Logger.getGlobal().info("Version 2.");
 		SpringApplication.run(BvPortalApplication.class, args);
-		Logger.getGlobal().info("Version 1.");
 	}
 	
 	@Bean

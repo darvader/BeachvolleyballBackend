@@ -1,4 +1,7 @@
+FROM andreasfiedler/angular-bvp
+
 FROM openjdk
+COPY --from=0 . .
 VOLUME /tmp
 ARG DEPENDENCY=target/dependency
 COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
