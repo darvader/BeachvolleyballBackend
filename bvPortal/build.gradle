@@ -51,6 +51,11 @@ task unpack(type: Copy) {
     from(zipTree(tasks.bootJar.outputs.files.singleFile))
     into("build/dependency")
 }
+
+test {
+    useJUnitPlatform()
+}
+
 docker {
     name "andreasfiedler/bvp"
     copySpec.from(tasks.unpack.outputs).into("dependency")
