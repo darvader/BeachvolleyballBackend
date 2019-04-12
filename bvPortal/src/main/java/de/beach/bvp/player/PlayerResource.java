@@ -51,7 +51,7 @@ public class PlayerResource {
 		return player.get();
 	}
 	
-	//@Secured("ROLE_USER")
+	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/players/{id}")
 	public void deletePlayer(@PathVariable long id) {
 		playerRepository.deleteById(id);
@@ -65,7 +65,7 @@ public class PlayerResource {
 		return player.get();
 	}
 	
-	public Optional<Player> login(String mail, String password) {
+	private Optional<Player> login(String mail, String password) {
 		Player player = new Player();
 		player.email = mail;
 		player.password = password;
