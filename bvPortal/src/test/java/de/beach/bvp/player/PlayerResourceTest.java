@@ -1,55 +1,44 @@
 package de.beach.bvp.player;
 
-import static org.junit.Assert.fail;
-
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import de.beach.bvp.BvPortalApplication;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = BvPortalApplication.class)
-@Ignore
-public class PlayerResourceTest {
+@TestPropertySource(locations = "classpath:test.properties")
+public class PlayerResourceTest
+{
 
-	@Autowired
-	private PlayerResource playerResource;
-	
-	@Test
-	public void testGetAllPlayers() {
-		fail("Not yet implemented");
-	}
+    @Autowired
+    private PlayerResource playerResource;
 
-	@Test
-	public void testCreatePlayer() {
-		for (int i = 0; i < 100; i++) {
-			Player player = new Player();
-			player.email = "test" + i + "@player.de";
-			player.firstName = "FirstName" + i;
-			player.gender = Gender.MALE;
-			player.name = "LastName" + i;
+    @Test
+    @WithMockUser(username = "spring")
+    public void testCreatePlayer()
+    {
+        createPlayer("test@player.de");
+    }
 
-			playerResource.createPlayer(player);
-		}
-	}
+    private void createPlayer(String email)
+    {
+        Player player = new Player();
+        player.email = email;
+        player.firstName = "FirstName";
+        player.name = "LastName";
+        player.gender = Gender.MALE;
 
-	@Test
-	public void testUpdatePlayer() {
-		fail("Not yet implemented");
-	}
+        playerResource.createPlayer(player);
+    }
 
-	@Test
-	public void testRetrievePlayer() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testDeletePlayer() {
-		fail("Not yet implemented");
-	}
-
+    @WithMockUser(username = "spring")
+    public void testDeletePlayer()
+    {
+    }
 }
