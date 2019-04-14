@@ -56,7 +56,7 @@ public class Tournament {
 	private String contact;
 	private String name;
 	
-	@OneToMany(mappedBy="tournament", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="tournament", fetch = FetchType.LAZY)
 	public Set<Registration> registrations;
 	
 	public Date getDate() {

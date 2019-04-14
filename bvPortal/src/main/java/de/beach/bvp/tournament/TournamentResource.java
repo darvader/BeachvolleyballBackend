@@ -21,6 +21,8 @@ public class TournamentResource {
 	private TournamentRepository tournamentRepository;
 	@Autowired
 	private RegistrationRepository registrationRepository;
+	@Autowired
+	private RegistrationValidator registrationValidiator;
 	
 	@GetMapping("/tournaments")
 	public List<Tournament> getAllTournaments() {
@@ -61,8 +63,15 @@ public class TournamentResource {
 	}
 	
 	@PostMapping("/register")
-	public Registration registerTournament(@RequestBody Registration registration) {
+	public Registration registerTournament(@RequestBody Registration registration) throws RegistrationException {
+		registrationValidiator.validate(registration);
+		
 		Registration savedRegistration = registrationRepository.save(registration);
 		return savedRegistration;
+	}
+
+	@PostMapping("/unregister")
+	public void deleteRegistration(Registration registration) {
+		registrationRepository.delete(registration);
 	}	
 }

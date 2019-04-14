@@ -1,12 +1,19 @@
 package de.beach.bvp.player;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
+
+import de.beach.bvp.tournament.registration.Registration;
 
 @Entity
 @Table(uniqueConstraints={@UniqueConstraint(columnNames={"email"})})
@@ -22,8 +29,16 @@ public class Player {
 	public String club;
 	public String password;
 	public String role;
+
+	@OneToMany(mappedBy ="player1", fetch = FetchType.LAZY)
+	public Set<Registration> registrationsPlayer1;
+	
+	@OneToMany(mappedBy ="player2", fetch = FetchType.LAZY)
+	public Set<Registration> registrationsPlayer2;
+	
 	@Transient
 	public String authdata;
+		
 	@Override
 	public String toString() {
 		return "Player [id=" + id + ", name=" + name + ", firstName=" + firstName + "]";
