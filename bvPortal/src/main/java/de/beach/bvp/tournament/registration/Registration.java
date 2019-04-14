@@ -35,6 +35,6 @@ public class Registration {
 	public Player player1;
 	@OneToOne
 	public Player player2;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.REFRESH)
 	public Tournament tournament;	
 }

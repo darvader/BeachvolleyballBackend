@@ -67,11 +67,14 @@ public class TournamentResource {
 		registrationValidiator.validate(registration);
 		
 		Registration savedRegistration = registrationRepository.save(registration);
+		registration.tournament.registrations.add(savedRegistration);
+		
 		return savedRegistration;
 	}
 
 	@PostMapping("/unregister")
 	public void deleteRegistration(Registration registration) {
+		registration.tournament.registrations.remove(registration);
 		registrationRepository.delete(registration);
 	}	
 }

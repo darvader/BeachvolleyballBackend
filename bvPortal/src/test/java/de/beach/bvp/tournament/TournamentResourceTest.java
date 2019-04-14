@@ -57,7 +57,7 @@ public class TournamentResourceTest
     	assertEquals(date, createdTournament.getDate());
     	assertEquals(description, createdTournament.getDescription());
     	assertEquals(entryFee, createdTournament.getEntryFee(), 0.001);
-    	assertEquals(type, createdTournament.getGender());
+    	assertEquals(type, createdTournament.getType());
     	assertEquals(name, createdTournament.getName());
     	assertEquals(playMode, createdTournament.getPlayMode());
     	assertEquals(priceMoney, createdTournament.getPriceMoney(), 0.001);

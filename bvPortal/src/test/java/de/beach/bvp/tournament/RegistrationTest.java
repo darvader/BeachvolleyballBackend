@@ -1,14 +1,12 @@
 package de.beach.bvp.tournament;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Date;
 import java.util.Optional;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import de.beach.bvp.BvPortalApplication;
 import de.beach.bvp.player.Gender;
@@ -28,6 +27,7 @@ import de.beach.bvp.tournament.registration.RegistrationRepository;
 @SpringBootTest(classes = BvPortalApplication.class)
 @TestPropertySource(locations = "classpath:test.properties")
 @WithMockUser(username = "spring", roles = { "ADMIN", "USER" })
+@Transactional
 public class RegistrationTest
 {
 
@@ -43,34 +43,117 @@ public class RegistrationTest
     Date date = new Date();
     String description = "test tournament description";
     double entryFee = 25.0;
-    Type type = Type.MIXED;
+    Type type = Type.MEN;
     String name = "testName";
     PlayMode playMode = PlayMode.DOUBLEOUT;
     double priceMoney = 300.0;
 
-	private Tournament tournament;
 
-	@BeforeEach
-    public void createTournament()
-    {
-        tournament = createTournament(category, contact, date, description, entryFee, type,
-        		name, playMode, priceMoney);
+    @Test
+    public void testRegisterTournamentSamePlayer() throws Exception {
+    	Tournament tournament = createTournament(category, contact, date, description, entryFee, type,
+    			name, playMode, priceMoney);
+    	Player player1 = createPlayer("FirstName1", "Name1", "Email1.de", Gender.MALE);
+    	
+    	Registration registration = new Registration(tournament, player1, player1);
+    	
+    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(registration));
     }
 
-    
+
     @Test
     public void testRegisterTournamentDifferentPlayers() throws Exception {
+    	Tournament tournament = createTournament(category, contact, date, description, entryFee, Type.MEN,
+    			name, playMode, priceMoney);
 
-    	Player player1 = createPlayer("FirstName1", "Name1", "Email1.de");
-    	Player player2 = createPlayer("FirstName2", "Name2", "Email2.de");
+    	Player player1 = createPlayer("FirstName1", "Name1", "Email1.de", Gender.MALE);
+    	Player player2 = createPlayer("FirstName2", "Name2", "Email2.de", Gender.MALE);
     	
     	Registration registration = new Registration(tournament, player1, player2);
     	
     	Registration createdRegistration = tournamentResource.registerTournament(registration);
 
     	assertEquals(registration, createdRegistration);
+    }
+
+    @Test
+    public void testRegisterFemaleMenTournament() throws Exception {
+    	Tournament tournament = createTournament(category, contact, date, description, entryFee, Type.MEN,
+    			name, playMode, priceMoney);
+    	
+    	Player player1 = createPlayer("FirstName1", "Name1", "Email1.de", Gender.MALE);
+    	Player player2 = createPlayer("FirstName2", "Name2", "Email2.de", Gender.FEMALE);
+    	
+    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(new Registration(tournament, player1, player2)));
+    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(new Registration(tournament, player2, player1)));
+    	player1.gender = Gender.FEMALE;
+    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(new Registration(tournament, player1, player2)));
+    	player1.gender = Gender.MALE;
+    	player2.gender = Gender.MALE;
+    	Registration registration = tournamentResource.registerTournament(new Registration(tournament, player1, player2));
+    	
+    	assertNotNull(registration);
+    }
+    
+    @Test
+    public void testRegisterMaleWomenTournament() throws Exception {
+    	Tournament tournament = createTournament(category, contact, date, description, entryFee, Type.WOMEN,
+    			name, playMode, priceMoney);
+    	
+    	Player player1 = createPlayer("FirstName1", "Name1", "Email1.de", Gender.MALE);
+    	Player player2 = createPlayer("FirstName2", "Name2", "Email2.de", Gender.FEMALE);
+    	
+    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(new Registration(tournament, player1, player2)));
+    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(new Registration(tournament, player2, player1)));
+    	player1.gender = Gender.MALE;
+    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(new Registration(tournament, player1, player2)));
+    	player1.gender = Gender.FEMALE;
+    	player2.gender = Gender.FEMALE;
+    	Registration registration = tournamentResource.registerTournament(new Registration(tournament, player1, player2));
+    	
+    	assertNotNull(registration);
+    }
+    
+    @Test
+    public void testRegisterMixedTournament() throws Exception {
+    	Tournament tournament = createTournament(category, contact, date, description, entryFee, Type.MIXED,
+    			name, playMode, priceMoney);
+    	
+    	Player player1 = createPlayer("FirstName1", "Name1", "Email1.de", Gender.MALE);
+    	Player player2 = createPlayer("FirstName2", "Name2", "Email2.de", Gender.MALE);
+    	
+    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(new Registration(tournament, player1, player2)));
+    	player1.gender = Gender.FEMALE;
+    	player2.gender = Gender.FEMALE;
+    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(new Registration(tournament, player1, player2)));
+
+    	player1.gender = Gender.FEMALE;
+    	player2.gender = Gender.MALE;
+    	Registration registration = tournamentResource.registerTournament(new Registration(tournament, player1, player2));
+    	assertNotNull(registration);
+    	tournamentResource.deleteRegistration(registration);
+
+    	player1.gender = Gender.MALE;
+    	player2.gender = Gender.FEMALE;
+    	registration = tournamentResource.registerTournament(new Registration(tournament, player1, player2));
+    	assertNotNull(registration);
+    }
+    
+    @Test
+    public void testDeleteRegistration() throws Exception {
+    	Tournament tournament = createTournament(category, contact, date, description, entryFee, Type.MEN,
+    			name, playMode, priceMoney);
+    	
+    	Player player1 = createPlayer("FirstName1", "Name1", "Email1.de", Gender.MALE);
+    	Player player2 = createPlayer("FirstName2", "Name2", "Email2.de", Gender.MALE);
+    	
+    	Registration registration = new Registration(tournament, player1, player2);
+    	
+    	Registration createdRegistration = tournamentResource.registerTournament(registration);
+    	
+    	assertEquals(registration, createdRegistration);
     	tournament = tournamentResource.retrieveTournament(tournament.getId());
-		assertEquals(1, tournament.registrations.size());
+    	assertEquals(1, tournament.registrations.size());
     	
     	tournamentResource.deleteRegistration(createdRegistration);
     	Optional<Registration> one = registrationRepository.findById(createdRegistration.id);
@@ -80,16 +163,30 @@ public class RegistrationTest
     	
     	tournament = tournamentResource.retrieveTournament(tournament.getId());
     	assertEquals(0, tournament.registrations.size());
-    	
-    	playerResource.deletePlayer(player1.id);
-    	playerResource.deletePlayer(player2.id);
     }
-
+    
+    @Test
+    public void testRegisterMixedTournamentDifferentPlayers() throws Exception {
+    	Tournament tournament = createTournament(category, contact, date, description, entryFee, Type.MIXED,
+    			name, playMode, priceMoney);
+    	
+    	Player player1 = createPlayer("FirstName1", "Name1", "Email1.de", Gender.MALE);
+    	Player player2 = createPlayer("FirstName2", "Name2", "Email2.de", Gender.FEMALE);
+    	
+    	Registration registration = new Registration(tournament, player1, player2);
+    	
+    	Registration createdRegistration = tournamentResource.registerTournament(registration);
+    	
+    	assertEquals(registration, createdRegistration);
+    }
+    
     @Test
     public void testRegister2TimesSamePlayers() throws Exception {
+    	Tournament tournament = createTournament(category, contact, date, description, entryFee, type,
+    			name, playMode, priceMoney);
     	
-    	Player player1 = createPlayer("FirstName1", "Name1", "Email1.de");
-    	Player player2 = createPlayer("FirstName2", "Name2", "Email2.de");
+    	Player player1 = createPlayer("FirstName1", "Name1", "Email1.de", Gender.MALE);
+    	Player player2 = createPlayer("FirstName2", "Name2", "Email2.de", Gender.MALE);
     	
     	Registration registration = new Registration(tournament, player1, player2);
     	
@@ -97,19 +194,15 @@ public class RegistrationTest
     	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(registration));
     	
     	assertEquals(registration, createdRegistration);
-    	
-    	registrationRepository.delete(createdRegistration);
-    	registrationRepository.flush();
-
-    	playerResource.deletePlayer(player1.id);
-    	playerResource.deletePlayer(player2.id);
     }
     
     @Test
     public void testRegister2TimesSamePlayersSwitched() throws Exception {
+    	Tournament tournament = createTournament(category, contact, date, description, entryFee, type,
+    			name, playMode, priceMoney);
     	
-    	Player player1 = createPlayer("FirstName1", "Name1", "Email1.de");
-    	Player player2 = createPlayer("FirstName2", "Name2", "Email2.de");
+    	Player player1 = createPlayer("FirstName1", "Name1", "Email1.de", Gender.MALE);
+    	Player player2 = createPlayer("FirstName2", "Name2", "Email2.de", Gender.MALE);
     	
     	Registration registration = new Registration(tournament, player1, player2);
     	
@@ -119,25 +212,14 @@ public class RegistrationTest
     	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(registration2));
     	
     	assertEquals(registration, createdRegistration);
-    	
-    	registrationRepository.delete(createdRegistration);
-    	registrationRepository.flush();
-    	
-    	playerResource.deletePlayer(player1.id);
-    	playerResource.deletePlayer(player2.id);
     }
     
-    @AfterEach
-    public void afterEach() {
-    	tournamentResource.deleteTournament(tournament.getId());
-    }
-    
-	private Player createPlayer(String firstName, String name, String email) {
+	private Player createPlayer(String firstName, String name, String email, Gender gender) {
 		Player player1 = new Player();
     	player1.firstName = firstName;
     	player1.name = name;
     	player1.email = email;
-    	player1.gender = Gender.MALE;
+    	player1.gender = gender;
     	
     	Player createdPlayer1 = playerResource.createPlayer(player1);
 		return createdPlayer1;

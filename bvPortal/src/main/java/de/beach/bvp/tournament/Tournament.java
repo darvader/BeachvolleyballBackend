@@ -1,6 +1,7 @@
 	package de.beach.bvp.tournament;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -56,8 +57,8 @@ public class Tournament {
 	private String contact;
 	private String name;
 	
-	@OneToMany(mappedBy="tournament", fetch = FetchType.LAZY)
-	public Set<Registration> registrations;
+	@OneToMany(mappedBy="tournament", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	public Set<Registration> registrations = new HashSet<>();
 	
 	public Date getDate() {
 		return date;
@@ -91,7 +92,7 @@ public class Tournament {
 		this.playMode = playMode;
 	}
 
-	public Type getGender() {
+	public Type getType() {
 		return gender;
 	}
 
