@@ -1,4 +1,4 @@
-	package de.beach.bvp.tournament;
+package de.beach.bvp.tournament;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import de.beach.bvp.tournament.registration.Registration;
@@ -56,10 +57,11 @@ public class Tournament {
 	private Double priceMoney;
 	private String contact;
 	private String name;
-	
+
+	@JsonIgnore
 	@OneToMany(mappedBy="tournament", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	public Set<Registration> registrations = new HashSet<>();
-	
+
 	public Date getDate() {
 		return date;
 	}
@@ -129,7 +131,7 @@ public class Tournament {
 	}
 
 	public Tournament() {
-		
+
 	}
 
 	public Long getId() {
