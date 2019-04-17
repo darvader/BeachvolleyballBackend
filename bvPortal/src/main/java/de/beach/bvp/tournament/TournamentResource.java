@@ -79,7 +79,7 @@ public class TournamentResource {
 		registrationRepository.delete(registration);
 	}
 
-	@GetMapping("/registrations/{i}")
+	@GetMapping("/registrations/{id}")
 	public Set<Registration> retrieveRegistrations(@PathVariable long id) throws TournamentNotFoundException {
 		Tournament t = retrieveTournament(id);
 		
