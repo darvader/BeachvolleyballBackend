@@ -4,7 +4,9 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -99,8 +101,8 @@ public class TournamentResourceTest
         		name, playMode, priceMoney);
     	
     	List<Tournament> tournaments = tournamentResource.getAllTournaments();
-    	assertEquals(3, tournaments.size());
-    	assertThat(tournaments, containsInAnyOrder(tournament1, tournament2, createdTournament));
+    	Tournament [] tournamentArray = new Tournament []{createdTournament, tournament1, tournament2};
+    	Arrays.asList(tournamentArray).forEach(t -> assertTrue(tournaments.contains(t)));
     }
     
     @AfterEach
