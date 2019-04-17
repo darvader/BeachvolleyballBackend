@@ -117,7 +117,7 @@ public class TournamentResourceTest
     	tournament.setDate(date);
     	tournament.setDescription(description);
     	tournament.setEntryFee(entryFee);
-    	tournament.setGender(type);
+    	tournament.setType(type);
     	tournament.setName(name);
     	tournament.setPlayMode(playMode);
     	tournament.setPriceMoney(priceMoney);

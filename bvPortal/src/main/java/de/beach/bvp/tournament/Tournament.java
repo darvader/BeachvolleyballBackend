@@ -51,7 +51,7 @@ public class Tournament {
 	private Category category;
 	private String description;
 	private PlayMode playMode;
-	private Type gender;
+	private Type type;
 	private Double entryFee;
 	private Double priceMoney;
 	private String contact;
@@ -93,11 +93,11 @@ public class Tournament {
 	}
 
 	public Type getType() {
-		return gender;
+		return type;
 	}
 
-	public void setGender(Type gender) {
-		this.gender = gender;
+	public void setType(Type type) {
+		this.type = type;
 	}
 
 	public Double getEntryFee() {
