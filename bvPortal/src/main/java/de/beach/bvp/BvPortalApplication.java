@@ -10,11 +10,11 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication(scanBasePackages = { "de.beach.bvp" })
-@EntityScan(basePackages = { "de.beach.bvp" })
+@EntityScan(basePackages = { "de.beach.bvp", "db.migration" })
 public class BvPortalApplication {
 
 	public static void main(String[] args) {
-		Logger.getGlobal().info("Version 2.");
+		Logger.getGlobal().info("Version 3.");
 		SpringApplication.run(BvPortalApplication.class, args);
 	}
 	

@@ -43,6 +43,7 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
           .and().csrf().disable();
 
         http.addFilterAfter(new CustomFilter(), BasicAuthenticationFilter.class); 
+        http.headers().frameOptions().disable();
     }
     
     @Override
