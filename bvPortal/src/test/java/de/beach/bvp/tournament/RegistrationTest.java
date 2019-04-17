@@ -1,11 +1,14 @@
 package de.beach.bvp.tournament;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Date;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -212,6 +215,30 @@ public class RegistrationTest
     	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(registration2));
     	
     	assertEquals(registration, createdRegistration);
+    }
+    
+    @Test 
+    public void testRetrieveRegistrations() throws RegistrationException, TournamentNotFoundException {
+    	Tournament tournament = createTournament(category, contact, date, description, entryFee, type,
+    			name, playMode, priceMoney);
+    	
+    	Player player1 = createPlayer("FirstName1", "Name1", "Email1.de", Gender.MALE);
+    	Player player2 = createPlayer("FirstName2", "Name2", "Email2.de", Gender.MALE);
+
+    	Registration registration = new Registration(tournament, player1, player2);
+    	
+    	Registration createdRegistration1 = tournamentResource.registerTournament(registration);
+    	
+    	Player player3 = createPlayer("FirstName3", "Name3", "Email3.de", Gender.MALE);
+    	Player player4 = createPlayer("FirstName4", "Name4", "Email4.de", Gender.MALE);
+
+    	registration = new Registration(tournament, player3, player4);
+    	
+    	Registration createdRegistration2 = tournamentResource.registerTournament(registration);
+    	
+    	Set<Registration> registrations = tournamentResource.retrieveRegistrations(tournament.getId());
+    	
+    	assertThat(registrations, containsInAnyOrder(createdRegistration1, createdRegistration2));
     }
     
 	private Player createPlayer(String firstName, String name, String email, Gender gender) {

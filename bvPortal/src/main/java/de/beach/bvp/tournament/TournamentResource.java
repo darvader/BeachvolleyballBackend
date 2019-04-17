@@ -2,6 +2,7 @@ package de.beach.bvp.tournament;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -76,5 +77,12 @@ public class TournamentResource {
 	public void deleteRegistration(Registration registration) {
 		registration.tournament.registrations.remove(registration);
 		registrationRepository.delete(registration);
+	}
+
+	@GetMapping("/registrations/{i}")
+	public Set<Registration> retrieveRegistrations(@PathVariable long id) throws TournamentNotFoundException {
+		Tournament t = retrieveTournament(id);
+		
+		return t.registrations;
 	}	
 }
