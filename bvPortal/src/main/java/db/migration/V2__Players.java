@@ -5,19 +5,17 @@ import java.util.stream.IntStream;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.flywaydb.core.api.migration.Context;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import de.beach.bvp.SpringUtility;
 import de.beach.bvp.player.Gender;
-import de.beach.bvp.player.Login;
 import de.beach.bvp.player.Player;
-import de.beach.bvp.player.PlayerResource;
+import de.beach.bvp.player.PlayerRepository;
 
 @Component
-public class V1__Players extends BaseJavaMigration {
+public class V2__Players extends BaseJavaMigration {
 
-	@Autowired
-	private PlayerResource playerResource = SpringUtility.getBean(PlayerResource.class);
+	private PlayerRepository playerRepo = SpringUtility.getBean(PlayerRepository.class);
 
 	public void migrate(Context context) throws Exception {
 
@@ -32,7 +30,7 @@ public class V1__Players extends BaseJavaMigration {
 			player.password = "testPassword";
 			player.role = "ROLE_USER";
 
-			playerResource.createPlayer(player);
+			playerRepo.save(player);
 		});
 
 		IntStream.range(100, 200).forEach(i -> {
@@ -46,12 +44,10 @@ public class V1__Players extends BaseJavaMigration {
 			player.password = "testPassword";
 			player.role = "ROLE_USER";
 
-			playerResource.createPlayer(player);
+			playerRepo.save(player);
 		});
 
-		Player master = playerResource.login(new Login("afiedler@test.de", "password"));
-
-		if (master == null) {
+		try {
 			Player player = new Player();
 			player.club = "VSV-Jena 90 e.V.";
 			player.email = "afiedler@test.de";
@@ -60,7 +56,9 @@ public class V1__Players extends BaseJavaMigration {
 			player.name = "Fiedler";
 			player.password = "password";
 			player.role = "ROLE_USER|ROLE_ADMIN|ROLE_TOURNAMENT";
-			playerResource.createPlayer(player);
+			playerRepo.save(player);
+		} catch (Exception e){
+			// do nothing if already exists
 		}
 	}
 }

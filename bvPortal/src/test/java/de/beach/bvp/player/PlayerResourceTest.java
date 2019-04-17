@@ -1,14 +1,14 @@
 package de.beach.bvp.player;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,7 +53,7 @@ public class PlayerResourceTest {
 
 	@Test
 	public void testDeletePlayer() throws PlayerNotFoundException {
-		Player player2 = createPlayer("test2@player.de", "FirstName2", "LastName2", Gender.MALE, "testClub",
+		Player player2 = createPlayer("test" + System.currentTimeMillis()	+ "@player.de", "FirstName2", "LastName2", Gender.MALE, "testClub",
 				"testPassword", "testRole", "testAuthData");
 
 		playerResource.deletePlayer(player2.id);
@@ -69,7 +69,7 @@ public class PlayerResourceTest {
 
 	@Test
 	public void testDeleteNotExistingPlayer() throws PlayerNotFoundException {
-		Player player2 = createPlayer("test2@player.de", "FirstName2", "LastName2", Gender.MALE, "testClub",
+		Player player2 = createPlayer("test" + System.currentTimeMillis() + "@player.de", "FirstName2", "LastName2", Gender.MALE, "testClub",
 				"testPassword", "testRole", "testAuthData");
 
 		playerResource.deletePlayer(player2.id);
@@ -117,9 +117,9 @@ public class PlayerResourceTest {
 
 		List<Player> players = playerResource.getAllPlayers();
 
-		assertEquals(3, players.size());
-
-		assertThat(players, containsInAnyOrder(player, player2, player3));
+		assertEquals(204, players.size());
+		
+		Arrays.asList(new Player[] {player, player2, player3}).forEach(p -> players.contains(p));
 
 		playerResource.deletePlayer(player2.id);
 		playerResource.deletePlayer(player3.id);
