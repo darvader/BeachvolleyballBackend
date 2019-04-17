@@ -29,15 +29,15 @@ public class PlayerResource {
 	
 	@Secured("ROLE_USER")
 	@PostMapping("/players")
-	public Player createPlayer(@RequestBody Player Player) {
-		Player savedPlayer = playerRepository.save(Player);
+	public Player createPlayer(@RequestBody Player player) {
+		Player savedPlayer = playerRepository.save(player);
 		return savedPlayer;
 	}
 	
 	@Secured("ROLE_ADMIN")
 	@PutMapping("/players")
-	public Player updatePlayer(@RequestBody Player Player) {
-		Player savedPlayer = playerRepository.save(Player);
+	public Player updatePlayer(@RequestBody Player player) {
+		Player savedPlayer = playerRepository.save(player);
 		return savedPlayer;
 	}
 	
