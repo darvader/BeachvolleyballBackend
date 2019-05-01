@@ -60,7 +60,7 @@ public class RegistrationTest
     	
     	Registration registration = new Registration(tournament, player1, player1);
     	
-    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(registration));
+    	assertThrows(RegistrationException.class, () -> tournamentResource.register(registration));
     }
 
 
@@ -74,7 +74,7 @@ public class RegistrationTest
     	
     	Registration registration = new Registration(tournament, player1, player2);
     	
-    	Registration createdRegistration = tournamentResource.registerTournament(registration);
+    	Registration createdRegistration = tournamentResource.register(registration);
 
     	assertEquals(registration, createdRegistration);
     }
@@ -87,13 +87,13 @@ public class RegistrationTest
     	Player player1 = createPlayer("FirstName1", "Name1", "Email1.de", Gender.MALE);
     	Player player2 = createPlayer("FirstName2", "Name2", "Email2.de", Gender.FEMALE);
     	
-    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(new Registration(tournament, player1, player2)));
-    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(new Registration(tournament, player2, player1)));
+    	assertThrows(RegistrationException.class, () -> tournamentResource.register(new Registration(tournament, player1, player2)));
+    	assertThrows(RegistrationException.class, () -> tournamentResource.register(new Registration(tournament, player2, player1)));
     	player1.gender = Gender.FEMALE;
-    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(new Registration(tournament, player1, player2)));
+    	assertThrows(RegistrationException.class, () -> tournamentResource.register(new Registration(tournament, player1, player2)));
     	player1.gender = Gender.MALE;
     	player2.gender = Gender.MALE;
-    	Registration registration = tournamentResource.registerTournament(new Registration(tournament, player1, player2));
+    	Registration registration = tournamentResource.register(new Registration(tournament, player1, player2));
     	
     	assertNotNull(registration);
     }
@@ -106,13 +106,13 @@ public class RegistrationTest
     	Player player1 = createPlayer("FirstName1", "Name1", "Email1.de", Gender.MALE);
     	Player player2 = createPlayer("FirstName2", "Name2", "Email2.de", Gender.FEMALE);
     	
-    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(new Registration(tournament, player1, player2)));
-    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(new Registration(tournament, player2, player1)));
+    	assertThrows(RegistrationException.class, () -> tournamentResource.register(new Registration(tournament, player1, player2)));
+    	assertThrows(RegistrationException.class, () -> tournamentResource.register(new Registration(tournament, player2, player1)));
     	player1.gender = Gender.MALE;
-    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(new Registration(tournament, player1, player2)));
+    	assertThrows(RegistrationException.class, () -> tournamentResource.register(new Registration(tournament, player1, player2)));
     	player1.gender = Gender.FEMALE;
     	player2.gender = Gender.FEMALE;
-    	Registration registration = tournamentResource.registerTournament(new Registration(tournament, player1, player2));
+    	Registration registration = tournamentResource.register(new Registration(tournament, player1, player2));
     	
     	assertNotNull(registration);
     }
@@ -125,20 +125,20 @@ public class RegistrationTest
     	Player player1 = createPlayer("FirstName1", "Name1", "Email1.de", Gender.MALE);
     	Player player2 = createPlayer("FirstName2", "Name2", "Email2.de", Gender.MALE);
     	
-    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(new Registration(tournament, player1, player2)));
+    	assertThrows(RegistrationException.class, () -> tournamentResource.register(new Registration(tournament, player1, player2)));
     	player1.gender = Gender.FEMALE;
     	player2.gender = Gender.FEMALE;
-    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(new Registration(tournament, player1, player2)));
+    	assertThrows(RegistrationException.class, () -> tournamentResource.register(new Registration(tournament, player1, player2)));
 
     	player1.gender = Gender.FEMALE;
     	player2.gender = Gender.MALE;
-    	Registration registration = tournamentResource.registerTournament(new Registration(tournament, player1, player2));
+    	Registration registration = tournamentResource.register(new Registration(tournament, player1, player2));
     	assertNotNull(registration);
-    	tournamentResource.deleteRegistration(registration);
+    	tournamentResource.unregister(registration);
 
     	player1.gender = Gender.MALE;
     	player2.gender = Gender.FEMALE;
-    	registration = tournamentResource.registerTournament(new Registration(tournament, player1, player2));
+    	registration = tournamentResource.register(new Registration(tournament, player1, player2));
     	assertNotNull(registration);
     }
     
@@ -152,13 +152,13 @@ public class RegistrationTest
     	
     	Registration registration = new Registration(tournament, player1, player2);
     	
-    	Registration createdRegistration = tournamentResource.registerTournament(registration);
+    	Registration createdRegistration = tournamentResource.register(registration);
     	
     	assertEquals(registration, createdRegistration);
     	tournament = tournamentResource.retrieveTournament(tournament.getId());
     	assertEquals(1, tournament.registrations.size());
     	
-    	tournamentResource.deleteRegistration(createdRegistration);
+    	tournamentResource.unregister(createdRegistration);
     	Optional<Registration> one = registrationRepository.findById(createdRegistration.id);
     	
     	assertEquals(true, one.isEmpty());
@@ -178,7 +178,7 @@ public class RegistrationTest
     	
     	Registration registration = new Registration(tournament, player1, player2);
     	
-    	Registration createdRegistration = tournamentResource.registerTournament(registration);
+    	Registration createdRegistration = tournamentResource.register(registration);
     	
     	assertEquals(registration, createdRegistration);
     }
@@ -193,8 +193,8 @@ public class RegistrationTest
     	
     	Registration registration = new Registration(tournament, player1, player2);
     	
-    	Registration createdRegistration = tournamentResource.registerTournament(registration);
-    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(registration));
+    	Registration createdRegistration = tournamentResource.register(registration);
+    	assertThrows(RegistrationException.class, () -> tournamentResource.register(registration));
     	
     	assertEquals(registration, createdRegistration);
     }
@@ -209,10 +209,10 @@ public class RegistrationTest
     	
     	Registration registration = new Registration(tournament, player1, player2);
     	
-    	Registration createdRegistration = tournamentResource.registerTournament(registration);
+    	Registration createdRegistration = tournamentResource.register(registration);
     	Registration registration2 = new Registration(tournament, player2, player1);
     	
-    	assertThrows(RegistrationException.class, () -> tournamentResource.registerTournament(registration2));
+    	assertThrows(RegistrationException.class, () -> tournamentResource.register(registration2));
     	
     	assertEquals(registration, createdRegistration);
     }
@@ -227,14 +227,14 @@ public class RegistrationTest
 
     	Registration registration = new Registration(tournament, player1, player2);
     	
-    	Registration createdRegistration1 = tournamentResource.registerTournament(registration);
+    	Registration createdRegistration1 = tournamentResource.register(registration);
     	
     	Player player3 = createPlayer("FirstName3", "Name3", "Email3.de", Gender.MALE);
     	Player player4 = createPlayer("FirstName4", "Name4", "Email4.de", Gender.MALE);
 
     	registration = new Registration(tournament, player3, player4);
     	
-    	Registration createdRegistration2 = tournamentResource.registerTournament(registration);
+    	Registration createdRegistration2 = tournamentResource.register(registration);
     	
     	Set<Registration> registrations = tournamentResource.retrieveRegistrations(tournament.getId());
     	

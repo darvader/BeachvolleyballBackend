@@ -64,7 +64,7 @@ public class TournamentResource {
 	}
 	
 	@PostMapping("/register")
-	public Registration registerTournament(@RequestBody Registration registration) throws RegistrationException {
+	public Registration register(@RequestBody Registration registration) throws RegistrationException {
 		registrationValidiator.validate(registration);
 		
 		Registration savedRegistration = registrationRepository.save(registration);
@@ -74,7 +74,7 @@ public class TournamentResource {
 	}
 
 	@PostMapping("/unregister")
-	public void deleteRegistration(Registration registration) {
+	public void unregister(@RequestBody Registration registration) {
 		registration.tournament.registrations.remove(registration);
 		registrationRepository.delete(registration);
 	}
